@@ -1,43 +1,42 @@
 #include <stdio.h>
-#include <stdlib.h> //rand() »ñÈ¡Ëæ»úÊı
+#include <stdlib.h> //rand() è·å–éšæœºæ•°
 #include <string.h>
 #include <time.h> //time()
-//#include <conio.h>//_getch() µ÷ÊÔÓÃ
+//#include <conio.h>//_getch() è°ƒè¯•ç”¨
 #include <graphics.h>
 
-//½çÃæ´óĞ¡
-#define main_height 640//Í¼ĞÎ»¯½çÃæµÄ¸ß
-#define main_width 640+320//¿í
-#define game_len 640//×ó±ßÓÎÏ·½çÃæµÄ±ß³¤
-#define gap 10//4x4¸ñ×ÓÖ®¼ä·ìÏ¶¿í¶È
-#define block (game_len-gap*4)/4 //¸ñ×Ó¿í150
-#define logo_width 240 //logo³¤
-#define logo_height 100//logo¸ß
+//ç•Œé¢å¤§å°
+#define main_height 640//å›¾å½¢åŒ–ç•Œé¢çš„é«˜
+#define main_width 640+320//å®½
+#define game_len 640//å·¦è¾¹æ¸¸æˆç•Œé¢çš„è¾¹é•¿
+#define gap 10//4x4æ ¼å­ä¹‹é—´ç¼éš™å®½åº¦
+#define block (game_len-gap*4)/4 //æ ¼å­å®½150
+#define logo_width 240 //logoé•¿
+#define logo_height 100//logoé«˜
 
-//ÑÕÉ«
-#define back_color RGB(184,171,159)//±³¾°ÑÕÉ«
-#define block_color RGB(202,190,176)//4x4·½¸ñÑÕÉ«
+//é¢œè‰²
+#define back_color RGB(184,171,159)//èƒŒæ™¯é¢œè‰²
+#define block_color RGB(202,190,176)//4x4æ–¹æ ¼é¢œè‰²
 #define filled_block_color RGB(238,228,218)
-#define text_color RGB(116,108,97)//Êı×ÖÑÕÉ«
-#define right_block_color RGB(251, 248, 239)//ÓÒ±ß¼Æ·Ö°åÑÕÉ«
+#define text_color RGB(116,108,97)//æ•°å­—é¢œè‰²
+#define right_block_color RGB(251, 248, 239)//å³è¾¹è®¡åˆ†æ¿é¢œè‰²
 #define logo_color RGB(236,196,0)
 
-int map[4][4];//ÆåÅÌ
-int score; // ¼ÇÂ¼·ÖÊı
-int step;  // ¼ÇÂ¼²½Êı
-bool win, fail;//ÊäÓ®ÅĞ¶Ï
+int map[4][4];//æ£‹ç›˜
+int score; // è®°å½•åˆ†æ•°
+int step;  // è®°å½•æ­¥æ•°
+bool win, fail;//è¾“èµ¢åˆ¤æ–­
 
-//mapÏà¹Øº¯Êı
+//mapç›¸å…³å‡½æ•°
 void initial();
-//void add();//µ÷ÊÔÓÃ
+//void add();//è°ƒè¯•ç”¨
 void fill();
-void sum_score();
 void gameover();
 void gamewin();
 void gamefail();
 void restart_exit();
 
-//Í¼ĞÎ»¯½çÃæÏà¹Øº¯Êı
+//å›¾å½¢åŒ–ç•Œé¢ç›¸å…³å‡½æ•°
 void background();
 void screen();
 void add_screen();
@@ -48,7 +47,7 @@ int main()
 
 	while (true)
 	{
-		//³õÊ¼»¯
+		//åˆå§‹åŒ–
 		score = 0;
 		step = 0;
 		win = false;
@@ -57,10 +56,10 @@ int main()
 		initial();
 		//initgraph(main_width, main_height);
 
-		//ÓÎÏ·Ñ­»·
+		//æ¸¸æˆå¾ªç¯
 		while (true)
 		{
-			//µ÷ÊÔÓÃ
+			//è°ƒè¯•ç”¨
 			//system("cls");
 			//for (int i = 0; i < 4; i++)
 			//{
@@ -72,7 +71,6 @@ int main()
 			//}
 			//printf("step=%d\nscore=%d", step, score);
 
-			sum_score();
 			background();
 			screen();
 			add_screen();
@@ -93,36 +91,36 @@ int main()
 	return 0;
 }
 
-// ½çÃæ³õÊ¼»¯ Ïò4x4ÆåÅÌÖĞËæ»úÌîÈëÁ½¸ö2
+// ç•Œé¢åˆå§‹åŒ– å‘4x4æ£‹ç›˜ä¸­éšæœºå¡«å…¥ä¸¤ä¸ª2
 void initial()
 {
-	memset(map, 0, sizeof(map)); // ÆåÅÌ³õÊ¼»¯Îª0
-	srand(time(NULL)); // ³õÊ¼»¯
+	memset(map, 0, sizeof(map)); // æ£‹ç›˜åˆå§‹åŒ–ä¸º0
+	srand(time(NULL)); // åˆå§‹åŒ–
 	for (int i = 0; i < 2; i++)
 	{
 		int ran_x = rand() % 4;
 		int ran_y = rand() % 4;
-		while (map[ran_x][ran_y] == 2) // ·ÀÖ¹Á½´Î2³öÏÖÔÚÍ¬Ò»Î»ÖÃ
+		while (map[ran_x][ran_y] == 2) // é˜²æ­¢ä¸¤æ¬¡2å‡ºç°åœ¨åŒä¸€ä½ç½®
 		{
 			ran_x = rand() % 4;
 			ran_y = rand() % 4;
 		}
-		if (ran_x >= 0 && ran_x < 4 && ran_y >= 0 && ran_y < 4) // ±£Ö¤³ÌĞò½¡×³ĞÔ
+		if (ran_x >= 0 && ran_x < 4 && ran_y >= 0 && ran_y < 4) // ä¿è¯ç¨‹åºå¥å£®æ€§
 		{
 			map[ran_x][ran_y] = 2;
 		}
 	}
 }
 
-// Ëæ»úÏò¿Õ°×´¦ÌîÈë2»ò4 Éú³É2µÄ¸ÅÂÊÊÇ90% 4ÊÇ10%
+// éšæœºå‘ç©ºç™½å¤„å¡«å…¥2æˆ–4 ç”Ÿæˆ2çš„æ¦‚ç‡æ˜¯90% 4æ˜¯10%
 void fill()
 {
-	srand(time(NULL));//³õÊ¼»¯
-	int pro = rand() % 10;//»ñÈ¡0-9µÄËæ»úÊı
+	srand(time(NULL));//åˆå§‹åŒ–
+	int pro = rand() % 10;//è·å–0-9çš„éšæœºæ•°
 	int ran_x = rand() % 4;
 	int ran_y = rand() % 4;
 
-	//¼ì²éÊÇ·ñ±»ÌîÂú
+	//æ£€æŸ¥æ˜¯å¦è¢«å¡«æ»¡
 	bool all_filled = true;
 	for (int i = 0; i < 4; i++)
 	{
@@ -137,18 +135,18 @@ void fill()
 	}
 	if (all_filled)
 	{
-		step--;//ÌîÂúÁËÇÒ°´ÏÂ·½ÏòÎŞ·¨ÒÆ¶¯¾ÍËµÃ÷´Ë²½ÎŞĞ§
-		return;//ÌîÂúÔòÎŞĞè¼ÌĞøÌî³ä ·ñÔò»áËÀÑ­»·
+		step--;//å¡«æ»¡äº†ä¸”æŒ‰ä¸‹æ–¹å‘æ— æ³•ç§»åŠ¨å°±è¯´æ˜æ­¤æ­¥æ— æ•ˆ
+		return;//å¡«æ»¡åˆ™æ— éœ€ç»§ç»­å¡«å…… å¦åˆ™ä¼šæ­»å¾ªç¯
 	}
 
-	//·ÀÖ¹ÖØ¸´ÌîÈë
+	//é˜²æ­¢é‡å¤å¡«å…¥
 	while (map[ran_x][ran_y] != 0)
 	{
 		ran_x = rand() % 4;
 		ran_y = rand() % 4;
 	}
 
-	//Ìî³ä ÓÃËæ»úÊıproµÄÖµÀ´ÊµÏÖ¸ÅÂÊÉú³É
+	//å¡«å…… ç”¨éšæœºæ•°proçš„å€¼æ¥å®ç°æ¦‚ç‡ç”Ÿæˆ
 	if (ran_x >= 0 && ran_x < 4 && ran_y >= 0 && ran_y < 4)
 	{
 		if (pro == 0) map[ran_x][ran_y] = 4;
@@ -156,49 +154,35 @@ void fill()
 	}
 }
 
-//·ÖÊı¼ÆËã
-void sum_score()
-{
-	int sum = 0;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			sum += map[i][j];
-		}
-	}
-	score = sum;
-}
-
-// ÅĞ¶ÏÓÎÏ·ÊäÓ®
-// ÓĞ2048ÔòÓ®
-// ÎŞ·¨ÒÆ¶¯ÔòÊä
+// åˆ¤æ–­æ¸¸æˆè¾“èµ¢
+// æœ‰2048åˆ™èµ¢
+// æ— æ³•ç§»åŠ¨åˆ™è¾“
 void gameover()
 {
-	//¼ì²éÓĞÃ»ÓĞ2048
+	//æ£€æŸ¥æœ‰æ²¡æœ‰2048
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
 			if (map[i][j] == 2048)
 			{
-				win = true;//Ó®ÁËÖ±½Ó·µ»Ø
+				win = true;//èµ¢äº†ç›´æ¥è¿”å›
 				return;
 			}
 		}
 	}
 
-	//¼ì²éÆåÅÌÊÇ·ñ±»ÌîÂú
+	//æ£€æŸ¥æ£‹ç›˜æ˜¯å¦è¢«å¡«æ»¡
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			if (map[i][j] == 0) return;//Ã»ÂúËµÃ÷»¹ÄÜÒÆ¶¯ Ö±½Ó·µ»Ø
+			if (map[i][j] == 0) return;//æ²¡æ»¡è¯´æ˜è¿˜èƒ½ç§»åŠ¨ ç›´æ¥è¿”å›
 		}
 	}
 
-	//Èç¹û±»ÌîÂú ¼ì²éÄÜ·ñÒÆ¶¯ ÏàÁÚÏàÍ¬¾ÍÄÜ¶¯
-	//Ö»¼ì²é8¸ö¸ñ×Ó ÎŞĞè±éÀú16¸ö¸ñ×Ó
+	//å¦‚æœè¢«å¡«æ»¡ æ£€æŸ¥èƒ½å¦ç§»åŠ¨ ç›¸é‚»ç›¸åŒå°±èƒ½åŠ¨
+	//åªæ£€æŸ¥8ä¸ªæ ¼å­ æ— éœ€éå†16ä¸ªæ ¼å­
 	if (map[0][0] == map[0][1] || map[0][0] == map[1][0]) return;
 	if (map[0][2] == map[0][1] || map[0][2] == map[1][2] || map[0][2] == map[0][3]) return;
 	if (map[1][1] == map[0][1] || map[1][1] == map[1][0] || map[1][1] == map[1][2] || map[1][1] == map[2][1]) return;
@@ -208,29 +192,29 @@ void gameover()
 	if (map[3][1] == map[3][0] || map[3][1] == map[2][1] || map[3][1] == map[3][2]) return;
 	if (map[3][3] == map[3][2] || map[3][3] == map[2][3]) return;
 
-	//ÌîÂúÇÒÎŞ·¨ÒÆ¶¯ÔòÊä
+	//å¡«æ»¡ä¸”æ— æ³•ç§»åŠ¨åˆ™è¾“
 	fail = true;
 }
 
-//Ê¤Àû½áËã½çÃæ
+//èƒœåˆ©ç»“ç®—ç•Œé¢
 void gamewin()
 {
 	background();
 	screen();
-	outtextxy(685, 425, L"ÄãÓ®ÁË");
+	outtextxy(685, 425, L"ä½ èµ¢äº†");
 	//printf("\nYOU WIN\n");
 }
 
-//¼Ä
+//å¯„
 void gamefail()
 {
 	background();
 	screen();
-	outtextxy(685, 400, L"ÄãÊäÁË");
+	outtextxy(685, 400, L"ä½ è¾“äº†");
 	//printf("\nYOU FAILED\n");
 }
 
-//°´RÖØĞÂ¿ªÊ¼ °´EÍË³ö
+//æŒ‰Ré‡æ–°å¼€å§‹ æŒ‰Eé€€å‡º
 void restart_exit()
 {
 	LOGFONT f;
@@ -240,8 +224,8 @@ void restart_exit()
 	settextstyle(&f);
 	setbkmode(TRANSPARENT);
 	settextcolor(back_color);
-	outtextxy(game_len + 15, 550, L"°´RÖØĞÂ¿ªÊ¼");
-	outtextxy(game_len + 15, 600, L"°´ESCÍË³ö");
+	outtextxy(game_len + 15, 550, L"æŒ‰Ré‡æ–°å¼€å§‹");
+	outtextxy(game_len + 15, 600, L"æŒ‰ESCé€€å‡º");
 
 	ExMessage k;
 	while (true)
@@ -262,15 +246,15 @@ void restart_exit()
 	}
 }
 
-//Í¼ĞÎ»¯½çÃæ»æÖÆ
+//å›¾å½¢åŒ–ç•Œé¢ç»˜åˆ¶
 void background()
 {
-	//ÉèÖÃ±³¾°ÑÕÉ«
+	//è®¾ç½®èƒŒæ™¯é¢œè‰²
 	setbkcolor(back_color);
 	cleardevice();
 	setfillcolor(block_color);
 
-	//Ìî³ä4x4ÆåÅÌ
+	//å¡«å……4x4æ£‹ç›˜
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -279,11 +263,11 @@ void background()
 		}
 	}
 
-	//Ìî³ä¼Æ·Ö°å±³¾°
+	//å¡«å……è®¡åˆ†æ¿èƒŒæ™¯
 	setfillcolor(right_block_color);
 	solidrectangle(game_len, 0, main_width, main_height);
 
-	//logo Î»ÖÃ´óĞ¡ºÍÎ»ÖÃÆ¾¸Ğ¾õµ÷
+	//logo ä½ç½®å¤§å°å’Œä½ç½®å‡­æ„Ÿè§‰è°ƒ
 	setfillcolor(logo_color);
 	fillroundrect(game_len + (main_width - game_len - logo_width) / 2, 10, main_width - (main_width - game_len - logo_width) / 2, logo_height + 20, 20, 20);
 	LOGFONT f;
@@ -293,10 +277,10 @@ void background()
 	settextstyle(&f);
 	setbkmode(TRANSPARENT);
 	settextcolor(back_color);
-	outtextxy(game_len + (main_width - game_len - logo_width) / 2 + 30, 20, L"2048");//ÏòÓÒÎ¢µ÷30
+	outtextxy(game_len + (main_width - game_len - logo_width) / 2 + 30, 20, L"2048");//å‘å³å¾®è°ƒ30
 
-	//ÉèÖÃ¼Æ·Ö°å×ÖÌåÑùÊ½
-	//´óĞ¡ºÍÎ»ÖÃÆ¾¸Ğ¾õµ÷ µ÷ºÃÁË±ğ¶¯
+	//è®¾ç½®è®¡åˆ†æ¿å­—ä½“æ ·å¼
+	//å¤§å°å’Œä½ç½®å‡­æ„Ÿè§‰è°ƒ è°ƒå¥½äº†åˆ«åŠ¨
 	gettextstyle(&f);
 	f.lfHeight = 80;
 	f.lfWidth = 20;
@@ -304,25 +288,25 @@ void background()
 	setbkmode(TRANSPARENT);
 	settextcolor(text_color);
 
-	//²½ÊıÕ¹Ê¾
-	TCHAR stp[10] = L"²½Êı:";
+	//æ­¥æ•°å±•ç¤º
+	TCHAR stp[10] = L"æ­¥æ•°:";
 	TCHAR temp_stp[10];
 	swprintf_s(temp_stp, _T("%d"), step);
 	wcscat_s(stp, temp_stp);
 	outtextxy(715, 175, stp);
 
-	//·ÖÊıÕ¹Ê¾
-	TCHAR scr[10] = L"·ÖÊı:";
+	//åˆ†æ•°å±•ç¤º
+	TCHAR scr[10] = L"åˆ†æ•°:";
 	TCHAR temp_scr[10];
 	swprintf_s(temp_scr, _T("%d"), score);
 	wcscat_s(scr, temp_scr);
 	outtextxy(715, 300, scr);
 }
 
-//Í¼ĞÎ»¯½çÃæ¸üĞÂ
+//å›¾å½¢åŒ–ç•Œé¢æ›´æ–°
 void screen()
 {
-	//ÉèÖÃ×ÖÌåÑùÊ½
+	//è®¾ç½®å­—ä½“æ ·å¼
 	LOGFONT f;
 	gettextstyle(&f);
 	f.lfHeight = block + 5;
@@ -331,8 +315,8 @@ void screen()
 	setbkmode(TRANSPARENT);
 	settextcolor(text_color);
 
-	//¸ù¾İÆåÅÌÊı¾İÔÚÍ¼ĞÎ»¯½çÃæÊä³öÊı×Ö
-	//×Ö·ûÎ»ÖÃÎ¢µ÷ ¾ÓÖĞ Î»ÖÃµ÷ºÃÁË±ğ¶¯
+	//æ ¹æ®æ£‹ç›˜æ•°æ®åœ¨å›¾å½¢åŒ–ç•Œé¢è¾“å‡ºæ•°å­—
+	//å­—ç¬¦ä½ç½®å¾®è°ƒ å±…ä¸­ ä½ç½®è°ƒå¥½äº†åˆ«åŠ¨
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -399,8 +383,8 @@ void screen()
 	}
 }
 
-//ÓÎÏ·ÔËĞĞÂß¼­ Ëæ×ÅÍæ¼Ò°´ÏÂ°´¼ü¶ÔÊı×éÉÏµÄÊı×Ö¾ÍĞĞÏà¼ÓºÍÒÆ¶¯²Ù×÷
-//Í¼ĞÎ»¯½çÃæ²Ù×÷
+//æ¸¸æˆè¿è¡Œé€»è¾‘ éšç€ç©å®¶æŒ‰ä¸‹æŒ‰é”®å¯¹æ•°ç»„ä¸Šçš„æ•°å­—å°±è¡Œç›¸åŠ å’Œç§»åŠ¨æ“ä½œ
+//å›¾å½¢åŒ–ç•Œé¢æ“ä½œ
 void add_screen()
 {
 	ExMessage k;
@@ -423,6 +407,7 @@ void add_screen()
 								if (map[x][y] == map[x][z])
 								{
 									map[x][y] += map[x][z];
+									score += map[x][y];
 									map[x][z] = 0;
 								}
 								break;
@@ -460,6 +445,7 @@ void add_screen()
 								if (map[x][y] == map[x][z])
 								{
 									map[x][y] += map[x][z];
+									score += map[x][y];
 									map[x][z] = 0;
 								}
 								break;
@@ -497,6 +483,7 @@ void add_screen()
 								if (map[x][y] == map[z][y])
 								{
 									map[x][y] += map[z][y];
+									score += map[x][y];
 									map[z][y] = 0;
 								}
 								break;
@@ -534,6 +521,7 @@ void add_screen()
 								if (map[x][y] == map[z][y])
 								{
 									map[x][y] += map[z][y];
+									score += map[x][y];
 									map[z][y] = 0;
 								}
 								break;
@@ -558,22 +546,22 @@ void add_screen()
 			fill();
 			break;
 		case 27:
-			exit(0);//°´ESCÍË³ö
+			exit(0);//æŒ‰ESCé€€å‡º
 			break;
 		}
 	}
-	//Sleep(100);//debugµÄÊ±ºò·´Ó¦Ò»ÏÂ releaseµÄÊ±ºò×¢ÊÍµô
+	//Sleep(100);//debugçš„æ—¶å€™ååº”ä¸€ä¸‹ releaseçš„æ—¶å€™æ³¨é‡Šæ‰
 }
 
-// ÓÎÏ·ÔËĞĞÂß¼­ Ëæ×ÅÍæ¼Ò°´ÏÂ°´¼ü¶ÔÊı×éÉÏµÄÊı×Ö¾ÍĞĞÏà¼ÓºÍÒÆ¶¯²Ù×÷
-//ÖÕ¶Ë²Ù×÷
-//Õâ¶Î´úÂëÖÕ¶Ëµ÷ÊÔÓÃ
+// æ¸¸æˆè¿è¡Œé€»è¾‘ éšç€ç©å®¶æŒ‰ä¸‹æŒ‰é”®å¯¹æ•°ç»„ä¸Šçš„æ•°å­—å°±è¡Œç›¸åŠ å’Œç§»åŠ¨æ“ä½œ
+//ç»ˆç«¯æ“ä½œ
+//è¿™æ®µä»£ç ç»ˆç«¯è°ƒè¯•ç”¨
 /*
 void add()
 {
 	char c;
 	c = _getch();
-	while (c != 'W' && c != 'A' && c != 'S' && c != 'D')//È·±£ÊäÈëWASD
+	while (c != 'W' && c != 'A' && c != 'S' && c != 'D')//ç¡®ä¿è¾“å…¥WASD
 	{
 		c = _getch();
 	}
