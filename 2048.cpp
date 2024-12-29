@@ -214,7 +214,7 @@ void gamefail()
 	//printf("\nYOU FAILED\n");
 }
 
-//按R重新开始 按E退出
+//按R重新开始 按ESC退出
 void restart_exit()
 {
 	LOGFONT f;
