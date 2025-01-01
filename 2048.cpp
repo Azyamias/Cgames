@@ -44,7 +44,7 @@ void add_screen();
 int main()
 {
 	initgraph(main_width, main_height);
-
+	BeginBatchDraw();//开启批量绘图模式解决缓冲问题
 	while (true)
 	{
 		//初始化
@@ -73,6 +73,7 @@ int main()
 
 			background();
 			screen();
+			FlushBatchDraw();
 			add_screen();
 			gameover();
 			if (win)
@@ -202,6 +203,7 @@ void gamewin()
 	background();
 	screen();
 	outtextxy(685, 425, L"你赢了");
+	FlushBatchDraw();
 	//printf("\nYOU WIN\n");
 }
 
@@ -211,10 +213,11 @@ void gamefail()
 	background();
 	screen();
 	outtextxy(685, 400, L"你输了");
+	FlushBatchDraw();
 	//printf("\nYOU FAILED\n");
 }
 
-//按R重新开始 按ESC退出
+//按R重新开始 按E退出
 void restart_exit()
 {
 	LOGFONT f;
@@ -226,6 +229,7 @@ void restart_exit()
 	settextcolor(back_color);
 	outtextxy(game_len + 15, 550, L"按R重新开始");
 	outtextxy(game_len + 15, 600, L"按ESC退出");
+	FlushBatchDraw();
 
 	ExMessage k;
 	while (true)
